@@ -14,6 +14,20 @@ class UIWidget(ABC, Generic[Template]):
         raise NotImplementedError
 
 
+class WebServer(ABC):
+    @abstractmethod
+    async def start_web_server(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    async def add_endpoint(self, path: str, endpoint: Callable[..., Coroutine]):
+        raise NotImplementedError
+
+
+async def validate():
+    ...
+
+
 class WebAppUI:
     def __init__(self, *widgets: UIWidget, title: str):
         self.widgets = widgets
