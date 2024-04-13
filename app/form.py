@@ -1,8 +1,9 @@
 from pathlib import Path
-from typing import Callable, Coroutine, Any
+from typing import Callable, Coroutine
 from dataclasses import dataclass
 
-from jinja2 import Environment, FileSystemLoader
+from starlette.requests import Request
+from starlette.templating import Jinja2Templates
 
 from app.webapp import UIWidget
 
@@ -13,7 +14,7 @@ class Field:
     regex: str
 
 
-class Form(UIWidget[str]):
+class Form(UIWidget):
     def __init__(
             self,
             *fields: Field,
@@ -26,17 +27,10 @@ class Form(UIWidget[str]):
         self.templates_dir_path = Path('.') / 'templates'
         self.template_filename = 'form.html'
 
-    def _get_template(self) -> str:
-        loader = FileSystemLoader(searchpath=self.templates_dir_path)
-        template_environment = Environment(loader=loader)
-        template = template_environment.get_template(self.template_filename)
-        rendered_template = template.render(title='test111')
-        return rendered_template
+    def get_async_endpoint(self) -> Callable[..., Coroutine]:
+        templates = Jinja2Templates(str(self.templates_dir_path))
 
-    def get_async_endpoint(self) -> Callable[..., Coroutine[Any, Any, str]]:
-        template_rendered = self._get_template()
-
-        async def form_endpoint() -> str:
-            return template_rendered
+        async def form_endpoint(request: Request):
+            return templates.TemplateResponse(request=request, name=self.template_filename)
 
         return form_endpoint

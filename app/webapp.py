@@ -1,16 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Callable, Coroutine, Any
-
-Template = TypeVar('Template')
+from typing import Callable, Coroutine
 
 
-class UIWidget(ABC, Generic[Template]):
+class UIWidget(ABC):
     @abstractmethod
-    def _get_template(self) -> Template:
-        raise NotImplementedError
-
-    @abstractmethod
-    def get_async_endpoint(self) -> Callable[..., Coroutine[Any, Any, Template]]:
+    def get_async_endpoint(self) -> Callable[..., Coroutine]:
         raise NotImplementedError
 
 
@@ -29,7 +23,7 @@ async def validate():
 
 
 class WebAppUI:
-    def __init__(self, *widgets: UIWidget, title: str):
+    def __init__(self, *widgets: UIWidget):
         self.widgets = widgets
 
     def _init_web_app(self):
