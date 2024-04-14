@@ -23,8 +23,9 @@ async def validate():
 
 
 class WebAppUI:
-    def __init__(self, *widgets: UIWidget):
+    def __init__(self, *widgets: UIWidget, bot_token: str):
         self.widgets = widgets
+        self.bot_token = bot_token
 
     def _init_web_app(self):
         ...
