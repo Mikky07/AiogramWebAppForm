@@ -18,11 +18,12 @@ class Form(UIWidget):
     def __init__(
             self,
             *fields: Field,
-            component_id: str,
+            widget_id: str,
             title: str
     ):
+        super().__init__(widget_id)
         self.fields = fields
-        self.id = component_id
+        self.id = widget_id
         self.title = title
         self.templates_dir_path = Path('.') / 'templates'
         self.template_filename = 'form.html'

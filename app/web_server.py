@@ -5,7 +5,7 @@ from starlette.applications import Starlette
 from .webapp import WebServer
 
 
-class WebServerImp(WebServer):
+class StarletteWebServer(WebServer):
     def __init__(self):
         self.app = Starlette(debug=True)
 
@@ -20,5 +20,5 @@ class WebServerImp(WebServer):
             methods=['GET']
         )
 
-    async def start_web_server(self):
-        ...
+    async def get_app(self) -> Starlette:
+        return self.app
