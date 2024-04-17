@@ -32,6 +32,10 @@ class Form(UIWidget):
         templates = Jinja2Templates(str(self.templates_dir_path))
 
         async def form_endpoint(request: Request):
-            return templates.TemplateResponse(request=request, name=self.template_filename)
+            return templates.TemplateResponse(
+                request=request,
+                name=self.template_filename,
+                context={'title': self.title}
+            )
 
         return form_endpoint

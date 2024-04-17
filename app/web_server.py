@@ -2,7 +2,7 @@ from typing import Callable, Coroutine
 
 from starlette.applications import Starlette
 
-from .webapp import WebServer
+from .abc import WebServer
 
 
 class StarletteWebServer(WebServer):
@@ -20,5 +20,5 @@ class StarletteWebServer(WebServer):
             methods=['GET']
         )
 
-    async def get_app(self) -> Starlette:
+    def get_app(self) -> Starlette:
         return self.app

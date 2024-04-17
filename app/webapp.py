@@ -1,26 +1,5 @@
-from abc import ABC, abstractmethod
-from typing import Callable, Coroutine
-
 from app.web_server import StarletteWebServer
-
-
-class UIWidget(ABC):
-    def __init__(self, widget_id: str):
-        self.widget_id = widget_id
-
-    @abstractmethod
-    def get_async_endpoint(self) -> Callable[..., Coroutine]:
-        raise NotImplementedError
-
-
-class WebServer(ABC):
-    @abstractmethod
-    async def get_app(self):
-        raise NotImplementedError
-
-    @abstractmethod
-    async def add_endpoint(self, path: str, endpoint: Callable[..., Coroutine]):
-        raise NotImplementedError
+from app.abc import UIWidget, WebServer
 
 
 async def validate():
@@ -43,8 +22,9 @@ class WebAppUI:
         for widget in self.widgets:
             if widget_ids.count(widget.widget_id) > 1:
                 raise Exception("duplicate ids detected")
+            widget_path = '/' + widget.widget_id
             self.web_server.add_endpoint(
-                path=widget.widget_id,
+                path=widget_path,
                 endpoint=widget.get_async_endpoint()
             )
 
